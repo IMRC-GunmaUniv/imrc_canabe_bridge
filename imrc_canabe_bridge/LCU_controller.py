@@ -2,13 +2,13 @@
 from imrc_messages.msg import EcanCommand
 from rclpy.publisher import Publisher
 import rclpy
+from rclpy.node import Node
 
 class LCU_controller:
-    def __init__(self):
-        pass
+    def __init__(self, node: Node): 
+        self.node = node 
 
-    @classmethod
-    def LCU_controller(cls, publisher: Publisher,MODE: str, LED_ID: int, Color: str, duration: int = 1000):
+    def LCU_control(self, publisher: Publisher,MODE: str, LED_ID: int, Color: str, duration: int = 1000):
         # Parse the color string into RGB values
         if Color == "red":
             R, G, B = 255, 0, 0
@@ -17,7 +17,7 @@ class LCU_controller:
         elif Color == "blue":
             R, G, B = 0, 0, 255
         else:
-            print(f"Invalid color: {Color}. Please use 'red', 'green', or 'blue'.")
+            self.node.get_logger().error(f"Invalid color: {Color}. Please use 'red', 'green', or 'blue'.")
         
         if MODE == "set_rgb":
             LCU_controller._set_rgb(publisher, LED_ID, R, G, B)
@@ -28,10 +28,10 @@ class LCU_controller:
         elif MODE == "set_bloom":
             LCU_controller._set_bloom(publisher, LED_ID, R, G, B, duration)
         else:
-            print(f"Invalid MODE: {MODE}. Please use 'set_rgb', 'turn_off', 'set_blink', or 'set_bloom'.")
+            self.node.get_logger().error(f"Invalid MODE: {MODE}. Please use 'set_rgb', 'turn_off', 'set_blink', or 'set_bloom'.")
         
 
-    @staticmethod
+    
     def _set_rgb(publisher: Publisher,LED_ID: int, R: int, G: int, B: int):
         msg = EcanCommand()
         msg.unit_code = 20
@@ -42,7 +42,7 @@ class LCU_controller:
         
         publisher.publish(msg)
 
-    @staticmethod
+    
     def _turn_off(publisher: Publisher, LED_ID: int):
         msg = EcanCommand()
         msg.unit_code = 20
@@ -53,7 +53,7 @@ class LCU_controller:
         
         publisher.publish(msg)
 
-    @staticmethod
+    
     def _set_blink(publisher: Publisher , LED_ID: int, R: int, G: int, B: int, time: int):
         msg = EcanCommand()
         msg.unit_code = 20
@@ -64,7 +64,7 @@ class LCU_controller:
         
         publisher.publish(msg)
 
-    @staticmethod
+    
     def _set_bloom(publisher: Publisher , LED_ID: int, R: int, G: int, B: int, time: int):
         msg = EcanCommand()
         msg.unit_code = 20

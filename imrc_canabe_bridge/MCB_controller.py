@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 from imrc_messages.msg import EcanCommand
 from rclpy.publisher import Publisher
-import rclpy
-
+from rclpy.node import Node
 class cmd_vel_controller:
-    def __init__(self):
-        pass
+    def __init__(self, node: Node): 
+        self.node = node 
 
     @classmethod
     def cmd_vel_send(cls, publisher: Publisher,unit_index: int,x: float, y: float,yaw: float):

@@ -25,7 +25,7 @@ class PCU_controller:
 
         # ROS 2 メッセージ（EcanCommand）の作成と送信
         msg = EcanCommand()
-        msg.unit_code = 15
+        msg.unit_code = 22
         msg.unit_index = unit_index
         msg.payload_index = 3
         msg.payload_entry = 0

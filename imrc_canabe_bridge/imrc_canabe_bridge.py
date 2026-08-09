@@ -12,14 +12,14 @@ from imrc_messages.msg import LCU
 from imrc_messages.msg import RU
 from imrc_messages.msg import PCU
 from imrc_messages.msg import EcanCommand
+from imrc_messages.msg import RobotActionProgress
 
 from imrc_canabe_bridge.LCU_controller import *
 from imrc_canabe_bridge.heartbeat import *
 from imrc_canabe_bridge.RU_controller import *
 from imrc_canabe_bridge.PCU_controller import *
 from imrc_canabe_bridge.MCB_controller import *
-
-
+from imrc_canabe_bridge.progress_receive import *
 
 class imrc_canabe_bridge(Node):
     def __init__(self):
@@ -30,6 +30,9 @@ class imrc_canabe_bridge(Node):
         self.logger = self.get_logger()
 
         self.canabe_pub = self.create_publisher(EcanCommand, '/can_tx_demo', 10)
+        self.canabe_sub = self.create_subscription(EcanCommand, '/can_rx_demo', self.canabe_callback, 10)
+        
+        self.robot_progress = self.create_publisher(RobotActionProgress, '/robot_progress', 10)
         
         self.heartbeat_timer = self.create_timer(0.5, self.heartbeat_timer_callback)
         self.topic_subscribe()
@@ -54,6 +57,7 @@ class imrc_canabe_bridge(Node):
     #-------受信-------
     def eCAN_callback(self, msg):
         self.logger.info(f"Received eCAN message: {msg}")
+        ProgressReceive.receive_progress(self.robot_progress, msg)
 
     
     #-------送信-------
@@ -87,7 +91,7 @@ class imrc_canabe_bridge(Node):
             self.pcu_ctrl.PCU_absolute_control(self.canabe_pub, msg.unit_index, msg.relay_state)
         else:
             self.logger.error(f"Invalid mode received in PCU message: {msg.mode}")
-
+            
 
 def main(args = None):
     rclpy.init(args=args)

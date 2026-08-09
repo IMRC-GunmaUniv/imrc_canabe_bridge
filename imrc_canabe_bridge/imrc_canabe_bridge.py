@@ -57,6 +57,7 @@ class imrc_canabe_bridge(Node):
     #-------受信-------
     def eCAN_callback(self, msg):
         self.logger.info(f"Received eCAN message: {msg}")
+        ProgressReceive.receive_progress(self.robot_progress, msg)
 
     
     #-------送信-------
@@ -91,9 +92,6 @@ class imrc_canabe_bridge(Node):
         else:
             self.logger.error(f"Invalid mode received in PCU message: {msg.mode}")
             
-    def canabe_callback(self, msg):
-        # self.logger.debug(f"Received CAN message: {msg}")
-        ProgressReceive.receive_progress(self.robot_progress, msg)
 
 def main(args = None):
     rclpy.init(args=args)

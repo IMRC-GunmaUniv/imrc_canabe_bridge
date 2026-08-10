@@ -91,7 +91,16 @@ class imrc_canabe_bridge(Node):
             self.pcu_ctrl.PCU_absolute_control(self.canabe_pub, msg.unit_index, msg.relay_state)
         else:
             self.logger.error(f"Invalid mode received in PCU message: {msg.mode}")
+<<<<<<< HEAD
             
+=======
+
+        
+    def canabe_callback(self, msg):
+        # self.logger.debug(f"Received CAN message: {msg}")
+        ProgressReceive.receive_progress(self.robot_progress, msg)
+
+>>>>>>> b59556a (MCBバグの修正)
 
 def main(args = None):
     rclpy.init(args=args)

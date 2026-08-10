@@ -8,9 +8,9 @@ class cmd_vel_controller:
 
     @classmethod
     def cmd_vel_send(cls, publisher: Publisher,unit_index: int,x: float, y: float,yaw: float):
-        x = int(x * 1000)
-        y = int(y * 1000)
-        yaw = int(yaw * 1000)
+        x = int(x * 100)
+        y = int(y * 100)
+        yaw = int(yaw * 100)
 
         x = max(-32768, min(32767, x))
         y = max(-32768, min(32767, y))

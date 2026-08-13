@@ -8,6 +8,7 @@ class cmd_vel_controller:
 
     @classmethod
     def cmd_vel_send(cls, publisher: Publisher,unit_index: int,x: float, y: float,yaw: float):
+
         x = int(x * 100)
         y = int(y * 100)
         yaw = int(yaw * 100)
@@ -32,3 +33,45 @@ class cmd_vel_controller:
         
         publisher.publish(msg)   
 
+TARGET = [
+    [2, "belt"],
+    [2, "injection"],
+    [3, "arm"],
+
+]
+
+# 以下payload_index, entryとparam, stateの対応
+TASK = {
+    "belt_injection" : [
+        [3, 10, "tore"],
+        [3, 12, "injection_hakobe"],
+
+    ],
+
+}
+
+class actuater_controller:
+    def __init__(self, node: Node): 
+        self.node = node 
+
+    @classmethod
+    def actuater_send(cls, publisher: Publisher, target_uint_id: str, param: str):
+        for target in TARGET:
+            if target[1] == target_uint_id:
+                unit_index = target[0]
+                break
+
+        for task in TASK[target_uint_id]:
+            if task[2] == param:
+                payload_index = task[0]
+                payload_entry = task[1]
+                break
+
+        msg = EcanCommand()
+        msg.unit_code = 16
+        msg.unit_index = unit_index
+        msg.payload_index = payload_index
+        msg.payload_entry = payload_entry
+        msg.data = [0, 0, 0, 0]
+
+        publisher.publish(msg)

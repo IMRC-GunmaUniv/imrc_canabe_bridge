@@ -13,6 +13,7 @@ from imrc_messages.msg import RU
 from imrc_messages.msg import PCU
 from imrc_messages.msg import EcanCommand
 from imrc_messages.msg import RobotActionProgress
+from imrc_messages.msg import MotorControl
 
 from imrc_canabe_bridge.LCU_controller import *
 from imrc_canabe_bridge.heartbeat import *
@@ -48,11 +49,13 @@ class imrc_canabe_bridge(Node):
         self.create_subscription(Twist, 'cmd_vel_can', self.cmd_vel_can_callback, 10)
         self.create_subscription(RU, 'ru', self.ru_callback, 10)
         self.create_subscription(PCU, 'pcu', self.pcu_callback, 10)
+        self.create_subscription(MotorControl, 'mcu', self.mcu_callback, 10)
 
         self.lcu_ctrl = LCU_controller(self)
         self.ru_ctrl = RU_controller(self)
         self.pcu_ctrl = PCU_controller(self)
         self.cmd_vel_ctrl = cmd_vel_controller(self)
+        self.actuater_ctrl = actuater_controller(self)
 
     #-------受信-------
     def eCAN_callback(self, msg):
@@ -67,6 +70,11 @@ class imrc_canabe_bridge(Node):
     def lcu_callback(self, msg):    #LCU
         self.logger.info(f"Received LCU message: {msg}")
         self.lcu_ctrl.LCU_control(self.canabe_pub, msg.led_mode, msg.led_id, msg.led_color, msg.duration)
+
+    def mcu_callback(self, msg):    #MCU
+        self.logger.info(f"Received MCU message: {msg}")
+        self.actuater_ctrl.actuater_send(self.canabe_pub, msg.target, msg.task, msg.value)
+
 
     def cmd_vel_can_callback(self, msg):    #cmd_vel_CAN
         self.logger.info(f"Received cmd_vel message: {msg}")

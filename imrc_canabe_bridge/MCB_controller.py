@@ -2,13 +2,13 @@
 from imrc_messages.msg import EcanCommand
 from rclpy.publisher import Publisher
 from rclpy.node import Node
+
 class cmd_vel_controller:
     def __init__(self, node: Node): 
         self.node = node 
 
     @classmethod
-    def cmd_vel_send(cls, publisher: Publisher,unit_index: int,x: float, y: float,yaw: float):
-
+    def cmd_vel_send(cls, publisher: Publisher, unit_index: int, x: float, y: float, yaw: float):
         x = int(x * 100)
         y = int(y * 100)
         yaw = int(yaw * 100)
@@ -37,17 +37,28 @@ TARGET = [
     [2, "belt"],
     [2, "injection"],
     [3, "arm"],
-
 ]
 
-# 以下payload_index, entryとparam, stateの対応
 TASK = {
-    "belt_injection" : [
+    "belt": [
         [3, 10, "tore"],
-        [3, 12, "injection_hakobe"],
-
+        [3, 12, "hakobe"],
     ],
+}
 
+DATA = {
+    "belt": {
+        "hakobe": [0],
+        "tore": [0]
+    },
+
+    "injection": {
+        "injection": lambda val: [
+            (val * 2) >> 8 & 0xFF,  # 1つ目の値（上位バイト）
+            (val * 2) & 0xFF        # 2つ目の値（下位バイト）
+        ]
+        
+    }
 }
 
 class actuater_controller:
@@ -55,23 +66,57 @@ class actuater_controller:
         self.node = node 
 
     @classmethod
-    def actuater_send(cls, publisher: Publisher, target_uint_id: str, param: str):
-        for target in TARGET:
-            if target[1] == target_uint_id:
-                unit_index = target[0]
+    def actuater_send(cls, publisher: Publisher, target_name: str, task_name: str, value: int):
+        # TARGETからユニットインデックスを取得
+        unit_index = None
+        for targets in TARGET:
+            if targets[1] == target_name:
+                unit_index = targets[0]
                 break
+        
+        if unit_index is None:
+            print("TARGET NOT FOUND")
+            return
 
-        for task in TASK[target_uint_id]:
-            if task[2] == param:
-                payload_index = task[0]
-                payload_entry = task[1]
+     
+        # TASKからペイロードインデックスとエントリを取得
+        payload_index = None
+        payload_entry = None
+        for category, tasks in TASK.items():
+            for task in tasks:
+                if task[2] == task_name:
+                    payload_index = task[0]
+                    payload_entry = task[1]
+                    break
+            if payload_index is not None:
                 break
+        
+        if payload_index is None:
+            print("TASK NOT FOUND")
+            return
 
+        #DATAからdataを作成
+        if target_name in DATA and task_name in DATA[target_name]:
+            formula = DATA[target_name][task_name]
+            # DATA内の計算式を実行
+            calculated = formula(value) if callable(formula) else formula
+            
+            # リスト（複数データ）で返ってきた場合、そのまま展開または代入
+            if isinstance(calculated, list):
+                data = [item & 0xFF for item in calculated]
+
+            else:
+                # 単一の数値の場合
+                data = [calculated & 0xFF, 0, 0, 0]
+        else:
+            data = [0]
+
+        # メッセージの作成と送信
         msg = EcanCommand()
         msg.unit_code = 16
         msg.unit_index = unit_index
         msg.payload_index = payload_index
         msg.payload_entry = payload_entry
-        msg.data = [0, 0, 0, 0]
+        msg.data = data  
 
         publisher.publish(msg)

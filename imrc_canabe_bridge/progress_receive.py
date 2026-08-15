@@ -58,7 +58,7 @@ class ProgressReceive:
                         msg = RobotActionProgress()
                         msg.target = target[2]
                         msg.param = i[2]
-                        if len(i) == 4:
+                        if len(i) == 4 and len(subscription.data) > 1:
                             msg.state = i[3].get(subscription.data[0], "unknown")
                         else:
                             msg.state = "success"

@@ -6,23 +6,34 @@ from imrc_messages.msg import EcanCommand
 # /can_rx_demoトピックからどの基板のデータを受け取るか指定し、それの名前を決定
 # [unit_code, unit_index, name]
 TARGET = [
-    [16, 2, "motor"],
+    [16, 1, "wheel"],
+    [16, 2, "injection"],
+    [16, 3, "arm"],
     [19, 1, "relay"],
     [20, 1, "lcu"],
     [22, 1, "pcu"],
 ]
 
 # 送信する値entryの値と、どの動作を命令しているかの対応
-MOTOR_ORDER_NUM = {10: "get", 11: "carry", 20: "injection"}
+INJECTION_ORDER_NUM = {10: "get", 11: "carry", 20: "injection"}
 
 # 以下payload_index, entryとparam, stateの対応
 TASK = {
-    "motor" : [
-        [3, 0, "send", MOTOR_ORDER_NUM],
-        [3, 1, "timeout", MOTOR_ORDER_NUM],
-        [3, 2, "error", MOTOR_ORDER_NUM],
+    "wheel" : [
+        [0, 0, "live", {1: "able", 2: "disable"}],
+    ],
+    
+    "injection" : [
+        [3, 0, "send", INJECTION_ORDER_NUM],
+        [3, 1, "timeout", INJECTION_ORDER_NUM],
+        [3, 2, "error", INJECTION_ORDER_NUM],
         [3, 11, "get"],
         [3, 11, "carry"],
+    ],
+    
+    "arm" : [
+        [3, 1, "finish", {1: "keep_success", 2: "catch_success", 3: "gate_success", 
+                        11: "keep_fail", 12: "catch_fail", 13: "gate_fail"}],
     ],
     
     "relay" : [

@@ -43,6 +43,7 @@ TASK = {
     "belt": [
         [3, 10, "catch"],
         [3, 12, "move"],
+        [4, 0,  "release"],
     ],
     
     "injection": [

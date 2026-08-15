@@ -50,11 +50,14 @@ TASK = {
     ],
 
     "arm": [
-        [3,0,"arm"]
+        [3,0,"tore"],
+        [3,0,"hozi"],
+        [3,0,"setti"]
+
     ]
 }
 
-DATA = {
+DATA = {#[0] TARGET [1]TASK
     "belt": {
         "hakobe": [0],
         "tore": [0]
@@ -70,9 +73,9 @@ DATA = {
     },
 
     "arm": {
-        "arm":{
-            "arm": lambda val:[val] #1:ボール取る　2:保持 3:設置
-        }
+        "tore":[1],
+        "hozi":[2],
+        "setti":[3]
     }
 }
 

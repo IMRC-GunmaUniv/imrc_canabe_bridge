@@ -44,6 +44,10 @@ TASK = {
         [3, 10, "tore"],
         [3, 12, "hakobe"],
     ],
+    
+    "injection": [
+        [3, 20, "injection"]
+    ]
 }
 
 DATA = {
@@ -54,10 +58,11 @@ DATA = {
 
     "injection": {
         "injection": lambda val: [
-            (val * 2) >> 8 & 0xFF,  # 1つ目の値（上位バイト）
-            (val * 2) & 0xFF        # 2つ目の値（下位バイト）
+            # (val * 2) >> 8 & 0xFF,  # 1つ目の値（上位バイト）
+            # (val * 2) & 0xFF        # 2つ目の値（下位バイト）
+            val // 1000,  # 1つ目の値（上位バイト）
+            val % 1000 // 10,   # 2つ目の値（下位バイト）
         ]
-        
     }
 }
 
@@ -78,7 +83,7 @@ class actuater_controller:
             print("TARGET NOT FOUND")
             return
 
-     
+
         # TASKからペイロードインデックスとエントリを取得
         payload_index = None
         payload_entry = None

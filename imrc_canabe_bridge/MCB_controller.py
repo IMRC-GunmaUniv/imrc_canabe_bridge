@@ -73,8 +73,8 @@ DATA = {#[0] TARGET [1]TASK
     },
 
     "arm": {
-        "tore":[1],
-        "hozi":[2],
+        "keep":[1],
+        "catch":[2],
         "setti":[3]
     }
 }

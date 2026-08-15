@@ -41,8 +41,8 @@ TARGET = [
 
 TASK = {
     "belt": [
-        [3, 10, "tore"],
-        [3, 12, "hakobe"],
+        [3, 10, "catch"],
+        [3, 12, "move"],
     ],
     
     "injection": [
@@ -52,15 +52,15 @@ TASK = {
     "arm": [
         [3,0,"keep"],
         [3,0,"catch"],
-        [3,0,"setti"]
+        [3,0,"gate"]
 
     ]
 }
 
 DATA = {#[0] TARGET [1]TASK
     "belt": {
-        "hakobe": [0],
-        "tore": [0]
+        "move": [0],
+        "catch": [0]
     },
 
     "injection": {
@@ -75,7 +75,7 @@ DATA = {#[0] TARGET [1]TASK
     "arm": {
         "keep":[1],
         "catch":[2],
-        "setti":[3]
+        "gate":[3]
     }
 }
 

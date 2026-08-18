@@ -101,13 +101,10 @@ class actuater_controller:
         # TASKからペイロードインデックスとエントリを取得
         payload_index = None
         payload_entry = None
-        for category, tasks in TASK.items():
-            for task in tasks:
-                if task[2] == task_name:
-                    payload_index = task[0]
-                    payload_entry = task[1]
-                    break
-            if payload_index is not None:
+        for task in TASK[target_name]:
+            if task[2] == task_name:
+                payload_index = task[0]
+                payload_entry = task[1]
                 break
         
         if payload_index is None:

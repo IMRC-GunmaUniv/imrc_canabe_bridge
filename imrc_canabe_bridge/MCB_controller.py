@@ -43,11 +43,12 @@ TASK = {
     "belt": [
         [3, 10, "catch"],
         [3, 12, "move"],
-        [4, 0,  "release"],
+        [3, 14,  "release"],
     ],
     
     "injection": [
-        [3, 20, "injection"]
+        [3, 20, "injection"],
+        [3, 21, "preparing"]
     ],
 
     "arm": [

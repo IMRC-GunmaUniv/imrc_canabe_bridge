@@ -15,7 +15,7 @@ TARGET = [
 ]
 
 # 送信する値entryの値と、どの動作を命令しているかの対応
-INJECTION_ORDER_NUM = {10: "get", 11: "carry", 20: "injection"}
+INJECTION_ORDER_NUM = {10: "get", 11: "carry", 20: "injection", 21: "preparing"}
 
 # 以下payload_index, entryとparam, stateの対応
 TASK = {
@@ -28,11 +28,11 @@ TASK = {
         [3, 1, "timeout", INJECTION_ORDER_NUM],
         [3, 2, "error", INJECTION_ORDER_NUM],
         [3, 11, "get"],
-        [3, 11, "carry"],
+        [3, 13, "carry"],
     ],
     
     "arm" : [
-        [3, 1, "finish", {1: "keep_success", 2: "catch_success", 3: "gate_success", 
+        [3, 0, "finish", {1: "keep_success", 2: "catch_success", 3: "gate_success", 
                         11: "keep_fail", 12: "catch_fail", 13: "gate_fail"}],
     ],
     

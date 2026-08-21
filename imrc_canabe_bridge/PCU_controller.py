@@ -24,13 +24,22 @@ class PCU_controller:
             self.node.get_logger().info("PCU_voltage_recovery")
 
         # ROS 2 メッセージ（EcanCommand）の作成と送信
+        #新PCU
         msg = EcanCommand()
         msg.unit_code = 22
         msg.unit_index = unit_index
         msg.payload_index = 3
         msg.payload_entry = 0
         msg.data = [int(relay_state)]  # uint8の配列（Pythonではリスト）に格納
+        publisher.publish(msg)
         
+        #旧PCU
+        msg = EcanCommand()
+        msg.unit_code = 18
+        msg.unit_index = 1
+        msg.payload_index = 3
+        msg.payload_entry = 0
+        msg.data = [int(relay_state)]  # uint8の配列（Pythonではリスト）に格納
         publisher.publish(msg)
 
     def _pcu_relay_control(self, publisher: Publisher, unit_index: int, relay_state: int):

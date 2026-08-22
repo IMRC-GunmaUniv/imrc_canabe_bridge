@@ -17,7 +17,7 @@ TARGET = [
 # 送信する値entryの値と、どの動作を命令しているかの対応
 INJECTION_ORDER_NUM = {10: "get", 11: "carry", 20: "injection", 21: "preparing"}
 
-# 以下payload_index, entryとparam, stateの対応
+# 以下payload_index, entryとparam, stateの対応 [index, entry, param, state] stateがない場合state = success
 TASK = {
     "wheel" : [
         [0, 0, "live", {1: "able", 2: "disable"}],
@@ -29,11 +29,12 @@ TASK = {
         [3, 2, "error", INJECTION_ORDER_NUM],
         [3, 11, "get"],
         [3, 13, "carry"],
+        [3, 15, "release"]
     ],
     
     "arm" : [
-        [3, 0, "finish", {1: "keep_success", 2: "catch_success", 3: "gate_success", 
-                        11: "keep_fail", 12: "catch_fail", 13: "gate_fail"}],
+        [3, 1, "finish", {1: "success", 2: "success", 3: "success"}],
+        [3, 2, "finish", {1: "failed", 2: "failed", 3: "failed",  }]
     ],
     
     "relay" : [

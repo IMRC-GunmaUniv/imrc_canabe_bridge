@@ -75,9 +75,8 @@ DATA = {#[0] TARGET [1]TASK
     },
 
     "arm": {
-        "keep":[1],
-        "catch":[2],
-        "gate":[3]
+        "catch":[1],
+        "gate":[2],
     }
 }
 

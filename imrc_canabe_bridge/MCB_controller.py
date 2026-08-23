@@ -54,12 +54,13 @@ TASK = {
     "arm": [
         [3,0,"keep"],
         [3,0,"catch"],
-        [3,0,"gate"]
+        [3,0,"gate"],
+        [3,20,"calibration"],
 
     ]
 }
 
-DATA = {#[0] TARGET [1]TASK
+DATA = {#[0] TARGET [1]TASK, [data]
     "belt": {
         "move": [0],
         "catch": [0]
@@ -77,6 +78,8 @@ DATA = {#[0] TARGET [1]TASK
     "arm": {
         "catch":[1],
         "gate":[2],
+
+        "calibration":[1]
     }
 }
 

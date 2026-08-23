@@ -34,7 +34,7 @@ class imrc_canabe_bridge(Node):
         
         self.robot_progress = self.create_publisher(RobotActionProgress, '/robot_progress', 10)
         
-        self.heartbeat_timer = self.create_timer(0.5, self.heartbeat_timer_callback)
+        # self.heartbeat_timer = self.create_timer(0.5, self.heartbeat_timer_callback)
         self.topic_subscribe()
 
         self.logger.info("cannabe bridge initialized.")    
@@ -63,8 +63,8 @@ class imrc_canabe_bridge(Node):
 
     
     #-------送信-------
-    def heartbeat_timer_callback(self): #生存信号
-        heartbeat.send_heartbeat(self.canabe_pub)
+    # def heartbeat_timer_callback(self): #生存信号
+    #     heartbeat.send_heartbeat(self.canabe_pub)
 
     def lcu_callback(self, msg):    #LCU
         self.logger.info(f"Received LCU message: {msg}")

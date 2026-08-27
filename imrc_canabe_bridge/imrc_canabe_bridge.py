@@ -76,7 +76,7 @@ class imrc_canabe_bridge(Node):
 
 
     def cmd_vel_can_callback(self, msg):    #cmd_vel_CAN
-        self.logger.info(f"Received cmd_vel message: {msg}")
+        #self.logger.info(f"Received cmd_vel message: {msg}")
         self.cmd_vel_ctrl.cmd_vel_send(self.canabe_pub, 1, msg.linear.x, msg.linear.y, msg.angular.z)
 
     def ru_callback(self, msg):    #RU

@@ -33,8 +33,8 @@ TASK = {
     ],
     
     "arm" : [
-        [3, 1, "finish", {1: "success", 2: "success", 3: "success"}],
-        [3, 2, "finish", {1: "failed", 2: "failed", 3: "failed",  }]
+        [3, 1, "finish", {1: "success", 2: "success", 3: "success",4: "success"}],
+        [3, 2, "finish", {1: "failed", 2: "failed", 3: "failed",  4:"failed"}]
     ],
     
     "relay" : [
